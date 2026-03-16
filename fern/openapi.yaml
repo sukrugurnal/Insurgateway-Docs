@@ -3,7 +3,7 @@ info:
   title: InsurGateway Offline API
   version: 1.0.0
   description: >
-    InsurGateway Offline API - Kimlik doğrulama ve offline iş yönetimi için API.
+    InsurGateway  API - Kimlik doğrulama ve offline iş yönetimi için API.
   contact:
     name: InsurGateway Support
     url: https://docs.insurgateway.com
