@@ -1,0 +1,27 @@
+instances:
+  - url: insurgateway.docs.buildwithfern.com
+    custom-domain: docs.insurgateway.com
+
+title: InsurGateway
+
+colors:
+  accentPrimary:
+    dark: "#6366f1"
+    light: "#4f46e5"
+  background:
+    dark: "#0f172a"
+    light: "#ffffff"
+
+navigation:
+  - tab: offline-api
+    layout:
+      - section: Authentication
+        contents:
+          - page: Authentication Login
+            api: POST /api/Authentication/login
+          - page: Refresh Token
+            api: POST /api/Authentication/RefreshToken
+      - section: Offline
+        contents:
+          - page: Jobs
+            api: GET /api/offline/jobs

@@ -1,0 +1,412 @@
+openapi: 3.1.0
+info:
+  title: InsurGateway Offline API
+  version: 1.0.0
+  description: >
+    InsurGateway Offline API - Kimlik doğrulama ve offline iş yönetimi için API.
+  contact:
+    name: InsurGateway Support
+    url: https://docs.insurgateway.com
+servers:
+  - url: https://gatewayapi.insurapps.net
+    description: Production
+
+security:
+  - BearerAuth: []
+
+paths:
+  /api/Authentication/login:
+    post:
+      operationId: authenticationLogin
+      summary: Authentication Login
+      description: >
+        Kullanıcıyı doğrular ve bir JWT erişim token'ı, yenileme token'ı
+        (refresh token) ve token'ın son kullanma tarihini döndürür.
+      tags:
+        - Authentication
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+            examples:
+              default:
+                summary: Login request
+                value:
+                  UserName: "your_username"
+                  Password: "your_password"
+                  WebApiKey: "-"
+      responses:
+        "200":
+          description: Başarılı giriş. JWT token, refresh token ve son kullanma tarihi döner.
+          headers:
+            X-Frame-Options:
+              schema:
+                type: string
+                nullable: true
+            X-XSS-Protection:
+              schema:
+                type: string
+                nullable: true
+            X-Content-Type-Options:
+              schema:
+                type: string
+                nullable: true
+            Referrer-Policy:
+              schema:
+                type: string
+                nullable: true
+            Token-Expired:
+              schema:
+                type: string
+                nullable: true
+            X-Powered-By:
+              schema:
+                type: string
+                nullable: true
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthTokenResponse"
+              examples:
+                success:
+                  summary: Başarılı yanıt
+                  value:
+                    Token: "<JWT>"
+                    RefreshToken: "<refresh_token>"
+                    Expiration: "2026-03-13T12:01:11Z"
+        "400":
+          description: >
+            Giriş bilgileri hatalı. Kullanıcı adı, şifre veya API anahtarı
+            geçersiz olduğunda döner.
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                error:
+                  value: "Giriş bilgileri hatalı. Lütfen tekrar deneyin."
+
+  /api/Authentication/RefreshToken:
+    post:
+      operationId: refreshToken
+      summary: Refresh Token
+      description: >
+        Mevcut erişim token'ı süresi dolmadan veya dolduktan sonra, yenileme
+        token'ı kullanarak yeni bir JWT erişim token'ı ve yenileme token'ı
+        almayı sağlar.
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshTokenRequest"
+            examples:
+              default:
+                summary: Refresh token request
+                value:
+                  Token: "<current_jwt_token>"
+                  RefreshToken: "<current_refresh_token>"
+      responses:
+        "200":
+          description: Token başarıyla yenilendi.
+          headers:
+            X-Frame-Options:
+              schema:
+                type: string
+                nullable: true
+            X-XSS-Protection:
+              schema:
+                type: string
+                nullable: true
+            X-Content-Type-Options:
+              schema:
+                type: string
+                nullable: true
+            Referrer-Policy:
+              schema:
+                type: string
+                nullable: true
+            X-Powered-By:
+              schema:
+                type: string
+                nullable: true
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthTokenResponse"
+              examples:
+                success:
+                  summary: Başarılı yanıt
+                  value:
+                    Token: "<JWT>"
+                    RefreshToken: "<new_refresh_token>"
+                    Expiration: "2026-03-13T12:13:15Z"
+        "400":
+          description: Geçersiz veya süresi dolmuş token bilgileri gönderildiğinde döner.
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                error:
+                  value: "Invalid Refresh Token"
+
+  /api/offline/jobs:
+    get:
+      operationId: getJobs
+      summary: Jobs
+      description: >
+        InsurGateway API üzerinden offline işlerin sayfalanmış listesini getirir.
+      tags:
+        - Offline
+      parameters:
+        - name: page
+          in: query
+          required: false
+          description: "Getirilecek sayfa numarası (1'den başlar). Varsayılan: 1"
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: pageSize
+          in: query
+          required: false
+          description: "Sayfa başına döndürülecek kayıt sayısı. Varsayılan: 50"
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 50
+        - name: sortBy
+          in: query
+          required: false
+          description: "Sonuçların sıralanacağı alan adı. Varsayılan: createDate"
+          schema:
+            type: string
+            default: createDate
+        - name: sortOrder
+          in: query
+          required: false
+          description: "Sıralama yönü. Varsayılan: desc"
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - name: createDate
+          in: query
+          required: false
+          description: "İşleri oluşturulma tarihine göre filtreler. Format: YYYY-MM-DD"
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: Offline işlerin sayfalanmış listesi başarıyla döndürüldü.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobsResponse"
+        "400":
+          description: Validasyon hatası. Geçersiz parametreler gönderildiğinde döner.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        "401":
+          description: Token geçersiz veya süresi dolmuş.
+        "403":
+          description: >
+            Kullanıcının bu endpoint'e erişim yetkisi yok veya token'da geçerli
+            bir sigorta şirketi ataması bulunamadı.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >
+        Bearer authentication. Token, Authentication Login endpoint'inden alınır.
+
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - UserName
+        - Password
+        - WebApiKey
+      properties:
+        UserName:
+          type: string
+          description: Hesaba ait kullanıcı adı.
+        Password:
+          type: string
+          description: Hesaba ait şifre.
+        WebApiKey:
+          type: string
+          description: >
+            Uygulama için Web API anahtarı. Varsayılan erişim için "-" kullanılır.
+
+    RefreshTokenRequest:
+      type: object
+      required:
+        - Token
+        - RefreshToken
+      properties:
+        Token:
+          type: string
+          description: Mevcut JWT erişim token'ı.
+        RefreshToken:
+          type: string
+          description: Daha önce giriş veya token yenileme işleminden elde edilen yenileme token'ı.
+
+    AuthTokenResponse:
+      type: object
+      properties:
+        Token:
+          type: string
+          description: JWT erişim token'ı.
+        RefreshToken:
+          type: string
+          description: Yenileme token'ı.
+        Expiration:
+          type: string
+          format: date-time
+          description: Erişim token'ının süresinin dolacağı UTC tarih ve saat bilgisi.
+
+    JobItem:
+      type: object
+      properties:
+        Id:
+          type: integer
+          description: İş kaydının benzersiz kimliği.
+        CurrentStage:
+          type: integer
+          description: İşin mevcut aşaması.
+        JobStatus:
+          type: integer
+          description: İş durumu kodu.
+        ProductId:
+          type: integer
+          description: Ürün kimliği.
+        ProductBranchId:
+          type: integer
+          description: Ürün branş kimliği.
+        RejectReasonId:
+          type: integer
+          nullable: true
+          description: Red nedeni kimliği.
+        LastJobActionType:
+          type: integer
+          description: Son iş aksiyon tipi.
+        CreateDate:
+          type: string
+          format: date-time
+          description: Oluşturulma tarihi.
+        LastActionDate:
+          type: string
+          format: date-time
+          description: Son işlem tarihi.
+        HasExistPolicyRequest:
+          type: boolean
+          description: Mevcut poliçe talebi var mı.
+        OwnerId:
+          type: integer
+          nullable: true
+          description: Sahip kimliği.
+        AgentName:
+          type: string
+          nullable: true
+          description: Acente adı.
+        ProductBranchName:
+          type: string
+          description: "Ürün branş adı (örn: Kasko, Trafik)."
+        PlatformProposalId:
+          type: string
+          nullable: true
+          description: Platform teklif kimliği.
+
+    PaginatedJobsData:
+      type: object
+      properties:
+        TotalCount:
+          type: integer
+          description: Toplam kayıt sayısı.
+        Page:
+          type: integer
+          description: Mevcut sayfa numarası.
+        Size:
+          type: integer
+          description: Sayfa başına kayıt sayısı.
+        TotalPage:
+          type: integer
+          description: Toplam sayfa sayısı.
+        HasNextPage:
+          type: boolean
+          description: Sonraki sayfa var mı.
+        HasPreviousPage:
+          type: boolean
+          description: Önceki sayfa var mı.
+        Items:
+          type: array
+          items:
+            $ref: "#/components/schemas/JobItem"
+
+    JobsResponse:
+      type: object
+      properties:
+        Status:
+          type: boolean
+          description: İşlem durumu.
+        Message:
+          type: string
+          description: Durum mesajı.
+        Response:
+          $ref: "#/components/schemas/PaginatedJobsData"
+
+    ValidationError:
+      type: object
+      properties:
+        Field:
+          type: string
+          description: Hatalı alan adı.
+        Message:
+          type: string
+          description: Hata mesajı.
+
+    ValidationErrorResponse:
+      type: object
+      properties:
+        Status:
+          type: boolean
+          description: İşlem durumu (false).
+        Message:
+          type: string
+          description: Hata özet mesajı.
+        Response:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+
+    ErrorResponse:
+      type: object
+      properties:
+        Status:
+          type: boolean
+          description: İşlem durumu (false).
+        Message:
+          type: string
+          description: Hata mesajı.
+        Response:
+          nullable: true
