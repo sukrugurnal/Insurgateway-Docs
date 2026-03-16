@@ -13,7 +13,7 @@ colors:
     light: "#ffffff"
 
 navigation:
-  - tab: offline-api
+  - tab: insurgateway-api
     layout:
       - section: Authentication
         contents:
