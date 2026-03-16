@@ -25,7 +25,7 @@ navigation:
         contents:
           - page: Jobs
             api: GET /api/offline/jobs
-favicon: favicon.ico
+favicon: favico.png
 logo:
   dark: logo.png
   light: logo.png
