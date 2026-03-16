@@ -1,3 +1,11 @@
-api:
-  specs:
-    - openapi: openapi/openapi.yaml
+groups:
+  postman:
+    generators:
+      - name: fernapi/fern-postman
+        version: 0.2.0
+        output:
+          location: postman  # Burası 'local-file-system' DEĞİL 'postman' olmalı
+        publish:
+          postman:
+            api-key: ${POSTMAN_API_KEY}
+            workspace-id: ${POSTMAN_WORKSPACE_ID}
