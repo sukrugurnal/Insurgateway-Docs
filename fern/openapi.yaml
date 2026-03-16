@@ -20,7 +20,7 @@ paths:
       operationId: authenticationLogin
       summary: Authentication Login
       description: >
-        Kullanıcıyı doğrular ve bir JWT erişim token'ı, yenileme token'ı
+        Kullanıcıyı doğrular 76ve bir JWT erişim token'ı, yenileme token'ı
         (refresh token) ve token'ın son kullanma tarihini döndürür.
       tags:
         - Authentication
