@@ -2,7 +2,7 @@ instances:
   - url: insurgateway.docs.buildwithfern.com
     custom-domain: docs.insurgateway.com
 
-title: InsurGateway
+title: Insurgateway
 
 colors:
   accentPrimary:
@@ -25,7 +25,7 @@ navigation:
         contents:
           - page: Jobs
             api: GET /api/offline/jobs
-favicon: favico.png
 logo:
   dark: logo.png
   light: logo.png
+favicon: favico.png
