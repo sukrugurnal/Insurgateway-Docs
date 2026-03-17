@@ -642,7 +642,7 @@ paths:
         | `sortOrder` | enum | ❌ | `desc` | Sonuçların sıralama yönü. Kabul
         edilen değerler: `asc`, `desc`. |
 
-        | `createDate` | string (tarih) | ❌ | `DateTime.Today` | İşleri
+        | `lastActionDate` | string (tarih) | ❌ | `DateTime.Today` | İşleri
         oluşturulma tarihine göre filtreler. Format: `YYYY-MM-DD` (örn.
         `2025-01-15`). Varsayılan olarak bugünün tarihi kullanılır. |
 
@@ -653,7 +653,7 @@ paths:
         ```
 
         GET
-        https://gatewayapi.insurapps.net/api/offline/jobs?page=1&pageSize=50&sortOrder=desc&createDate=2025-03-13
+        https://gatewayapi.insurapps.net/api/offline/jobs?page=1&pageSize=50&sortOrder=desc&lastActionDate=2025-03-13
 
          ```
 
