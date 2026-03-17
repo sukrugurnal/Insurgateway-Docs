@@ -13,17 +13,7 @@ colors:
     light: "#ffffff"
 
 navigation:
-    layout:
-      - api: API Reference
-        flattened: true
-        layout:
-          - section: Authentication
-            contents:
-              - POST /api/Authentication/login
-              - POST /api/Authentication/RefreshToken
-          - section: Offline
-            contents:
-              - GET /api/offline/jobs
+  - api: API Reference
 
 logo:
   dark: logo.png
