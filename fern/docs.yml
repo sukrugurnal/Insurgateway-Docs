@@ -13,7 +13,6 @@ colors:
     light: "#ffffff"
 
 navigation:
-  - tab: offline-api
     layout:
       - api: API Reference
         flattened: true
