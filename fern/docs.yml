@@ -13,7 +13,7 @@ colors:
     light: "#ffffff"
 
 navigation:
-  - tab: insurgateway-api
+  - tab: offline-api
     layout:
       - api: API Reference
         flattened: true
