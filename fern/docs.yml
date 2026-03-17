@@ -13,7 +13,7 @@ colors:
     light: "#ffffff"
 
 navigation:
-  - api: InsurGateway API
+  - api: Insurgateway API
 
 logo:
   dark: logo.png
