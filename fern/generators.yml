@@ -1,3 +1,8 @@
 api:
   specs:
     - openapi: openapi.yaml
+
+docs:
+  instances:
+    - url: insurgateway-680184.docs.buildwithfern.com
+      custom-domain: docs.insurgateway.com
