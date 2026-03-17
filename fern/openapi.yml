@@ -649,7 +649,7 @@ paths:
         ```
 
         GET
-        https://gatewayapi.insurapps.net/api/offline/jobs?page=1&pageSize=50&sortBy=createDate&sortOrder=desc&createDate=2025-03-13
+        https://gatewayapi.insurapps.net/api/offline/jobs?page=1&pageSize=50&sortOrder=desc&createDate=2025-03-13
 
          ```
 
@@ -662,55 +662,51 @@ paths:
         ``` json
 
         {
-            "Status": true,
-            "Message": "Success",
-            "Response": {
-                "TotalCount": 38,
-                "Page": 1,
-                "Size": 50,
-                "TotalPage": 1,
-                "HasNextPage": false,
-                "HasPreviousPage": false,
-                "Items": [
-                    {
-                        "Id": 100001,
-                        "CurrentStage": 1,
-                        "JobStatus": 0,
-                        "ProductId": 10,
-                        "ProductBranchId": 3,
-                        "RejectReasonId": null,
-                        "LastJobActionType": 1,
-                        "CreateDate": "2025-03-01T10:00:00.0000000",
-                        "LastActionDate": "2025-03-01T10:00:00.0000000",
-                        "HasExistPolicyRequest": false,
-                        "OwnerId": null,
-                        "AgentName": null,
-                        "ProductBranchName": "Kasko",
-                        "PlatformProposalId": null,
-                        "InsuranceCompanyProposalNumber": "234234231"
-                    },
-                    {
-                        "Id": 100002,
-                        "CurrentStage": 2,
-                        "JobStatus": 1,
-                        "ProductId": 20,
-                        "ProductBranchId": 1,
-                        "RejectReasonId": null,
-                        "LastJobActionType": 2,
-                        "CreateDate": "2025-03-02T11:30:00.0000000",
-                        "LastActionDate": "2025-03-02T14:00:00.0000000",
-                        "HasExistPolicyRequest": true,
-                        "OwnerId": 5001,
-                        "AgentName": "Acme Sigorta Acentesi",
-                        "ProductBranchName": "Trafik",
-                        "PlatformProposalId": "PLT-0001",
-                        "InsuranceCompanyProposalNumber": null
-                    },
-                    .
-                    .
-                    .
-                ]
-            }
+            "TotalCount": 38,
+            "Page": 1,
+            "Size": 50,
+            "TotalPage": 1,
+            "HasNextPage": false,
+            "HasPreviousPage": false,
+            "Items": [
+                {
+                    "Id": 100001,
+                    "CurrentStage": 1,
+                    "JobStatus": 0,
+                    "ProductId": 10,
+                    "ProductBranchId": 3,
+                    "RejectReasonId": null,
+                    "LastJobActionType": 1,
+                    "CreateDate": "2025-03-01T10:00:00.0000000",
+                    "LastActionDate": "2025-03-01T10:00:00.0000000",
+                    "HasExistPolicyRequest": false,
+                    "OwnerId": null,
+                    "AgentName": null,
+                    "ProductBranchName": "Kasko",
+                    "PlatformProposalId": null,
+                    "InsuranceCompanyProposalNumber": "234234231"
+                },
+                {
+                    "Id": 100002,
+                    "CurrentStage": 2,
+                    "JobStatus": 1,
+                    "ProductId": 20,
+                    "ProductBranchId": 1,
+                    "RejectReasonId": null,
+                    "LastJobActionType": 2,
+                    "CreateDate": "2025-03-02T11:30:00.0000000",
+                    "LastActionDate": "2025-03-02T14:00:00.0000000",
+                    "HasExistPolicyRequest": true,
+                    "OwnerId": 5001,
+                    "AgentName": "Acme Sigorta Acentesi",
+                    "ProductBranchName": "Trafik",
+                    "PlatformProposalId": "PLT-0001",
+                    "InsuranceCompanyProposalNumber": null
+                }
+                .
+                .
+                .
+            ]
         }
 
          ```
@@ -719,23 +715,19 @@ paths:
 
         | --- | --- | --- |
 
-        | `Status` | boolean | İşlem durumu (`true` = başarılı). |
+        | `TotalCount` | integer | Toplam kayıt sayısı. |
 
-        | `Message` | string | Durum mesajı. |
+        | `Page` | integer | Mevcut sayfa numarası. |
 
-        | `Response.TotalCount` | integer | Toplam kayıt sayısı. |
+        | `Size` | integer | Sayfa başına kayıt sayısı. |
 
-        | `Response.Page` | integer | Mevcut sayfa numarası. |
+        | `TotalPage` | integer | Toplam sayfa sayısı. |
 
-        | `Response.Size` | integer | Sayfa başına kayıt sayısı. |
+        | `HasNextPage` | boolean | Sonraki sayfa var mı. |
 
-        | `Response.TotalPage` | integer | Toplam sayfa sayısı. |
+        | `HasPreviousPage` | boolean | Önceki sayfa var mı. |
 
-        | `Response.HasNextPage` | boolean | Sonraki sayfa var mı. |
-
-        | `Response.HasPreviousPage` | boolean | Önceki sayfa var mı. |
-
-        | `Response.Items` | array | İş kayıtlarının listesi. |
+        | `Items` | array | İş kayıtlarının listesi. |
 
 
         **Items Dizisi:**
@@ -789,6 +781,7 @@ paths:
 
         {
             "Status": false,
+            "Code": "Validation.General",
             "Message": "One or more validation errors occurred",
             "Response": [
                 {
@@ -822,6 +815,7 @@ paths:
 
         {
             "Status": false,
+            "Code": "OfflineJobs.InsuranceCompanyNotFound",
             "Message": "No valid insurance company assignment found in token.",
             "Response": null
         }
@@ -971,6 +965,165 @@ paths:
       tags:
         - Offline
       summary: Histories
+      description: >-
+        ## İş Geçmişi Getir (Histories)
+
+
+        Belirtilen offline iş kaydına ait geçmiş (history) bilgilerini getirir.
+        Bu endpoint, bir işin oluşturulmasından itibaren geçirdiği yönlendirme
+        geçmişini kronolojik olarak listeler.
+
+
+        ### Endpoint
+
+
+        `GET /api/offline/jobs/:jobId/histories`
+
+
+        ### Kimlik Doğrulama
+
+
+        Bu istek, üst koleksiyondan miras alınan **Bearer Token** kimlik
+        doğrulamasını kullanır. Token, `{{authToken}}` ortam değişkeninden
+        çözümlenir.
+
+
+        ### Yol Parametreleri (Path Variables)
+
+
+        | Parametre | Tip | Zorunlu | Açıklama |
+
+        | --- | --- | --- | --- |
+
+        | `jobId` | integer | ✅ | Geçmiş kayıtları getirilecek offline işin
+        benzersiz kimliği. |
+
+
+        ### Örnek İstek
+
+
+        ```
+
+        GET https://gatewayapi.insurapps.net/api/offline/jobs/24532234/histories
+
+         ```
+
+        ### Yanıt Yapısı
+
+
+        #### Başarılı Yanıt (200 OK)
+
+
+        İş kaydına ait yönlendirme geçmişi bir JSON dizisi olarak döner.
+
+
+        ``` json
+
+        [
+            {
+                "Message": "İş kendisine yönlendirildi.",
+                "ForwardDate": "2025-01-10T11:46:05.4980981",
+                "FromUserId": null,
+                "ToUserId": "4c31d679-b285-4040-9b57-5ce49e9f604c",
+                "AssignerUserId": "4c31d679-b285-4040-9b57-5ce49e9f604c"
+            },
+            {
+                "Message": null,
+                "ForwardDate": "2025-01-10T11:46:21.0530294",
+                "FromUserId": "4c31d679-b285-4040-9b57-5ce49e9f604c",
+                "ToUserId": "97aa0081-8ca5-4acb-b757-15efd1bba944",
+                "AssignerUserId": "4c31d679-b285-4040-9b57-5ce49e9f604c"
+            },
+            {
+                "Message": "İş kendisine yönlendirildi.",
+                "ForwardDate": "2026-02-04T13:54:28.7929678",
+                "FromUserId": "97aa0081-8ca5-4acb-b757-15efd1bba944",
+                "ToUserId": "ae116cd4-a26e-47ab-8b0f-07d5ac9cb79c",
+                "AssignerUserId": "ae116cd4-a26e-47ab-8b0f-07d5ac9cb79c"
+            }
+        ]
+
+         ```
+
+        **Dizi Elemanları:**
+
+
+        | Alan | Tip | Açıklama |
+
+        | --- | --- | --- |
+
+        | `Message` | string / null | Yönlendirme ile ilgili açıklama mesajı.
+        Otomatik yönlendirmelerde `null` olabilir. |
+
+        | `ForwardDate` | string (datetime) | Yönlendirmenin gerçekleştirildiği
+        tarih ve saat. |
+
+        | `FromUserId` | string (GUID) / null | Yönlendirmeyi yapan (kaynak)
+        kullanıcının kimliği. İlk atamada `null` olabilir. |
+
+        | `ToUserId` | string (GUID) | Yönlendirmenin hedef kullanıcısının
+        kimliği. |
+
+        | `AssignerUserId` | string (GUID) | Yönlendirme işlemini gerçekleştiren
+        kullanıcının kimliği. |
+
+
+        #### İş Bulunamadı Hatası (404 - Status: false)
+
+
+        Belirtilen `jobId` ile eşleşen bir iş kaydı bulunamadığında döner.
+
+
+        ``` json
+
+        {
+            "Status": false,
+            "Code": "OfflineJobs.JobNotFound",
+            "Message": "No job found for the requested JobId.",
+            "Response": null
+        }
+
+         ```
+
+        | Alan | Tip | Açıklama |
+
+        | --- | --- | --- |
+
+        | `Status` | boolean | İşlem durumu (`false` = başarısız). |
+
+        | `Code` | string | Hata kodu. |
+
+        | `Message` | string | Hata mesajı. |
+
+        | `Response` | null | Hata durumunda `null` döner. |
+
+
+        #### Yetkilendirme Hataları
+
+
+        | Durum Kodu | Açıklama |
+
+        | --- | --- |
+
+        | `401 Unauthorized` | Token geçersiz veya süresi dolmuş. Body dönmez. |
+
+        | `403 Forbidden` | Kullanıcının bu endpoint'e erişim yetkisi yok. Body
+        dönmez. |
+
+
+        ### Notlar
+
+
+        - İstek göndermeden önce aktif ortamda geçerli bir `authToken`
+        değişkeninin ayarlandığından emin olun. Token almak için
+        **Authentication Login** isteğini kullanabilirsiniz.
+            
+        - Token süresi dolmuşsa, yeni bir token almak için **Refresh Token**
+        isteğini kullanın.
+            
+        - `jobId` değeri, **Jobs** endpoint'inden dönen `Id` alanına karşılık
+        gelir. Önce Jobs endpoint'ini kullanarak geçerli iş kimliklerini
+        listeleyebilirsiniz.
       parameters:
         - name: jobId
           in: path
@@ -979,6 +1132,33 @@ paths:
           required: true
           example: '24532234'
       responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                - Message: İş kendisine yönlendirildi.
+                  ForwardDate: '2025-01-10T11:46:05.4980981'
+                  FromUserId: null
+                  ToUserId: 4c31d679-b285-4040-9b57-5ce49e9f604c
+                  AssignerUserId: 4c31d679-b285-4040-9b57-5ce49e9f604c
+                - Message: null
+                  ForwardDate: '2025-01-10T11:46:21.0530294'
+                  FromUserId: 4c31d679-b285-4040-9b57-5ce49e9f604c
+                  ToUserId: 97aa0081-8ca5-4acb-b757-15efd1bba944
+                  AssignerUserId: 4c31d679-b285-4040-9b57-5ce49e9f604c
+                - Message: İş kendisine yönlendirildi.
+                  ForwardDate: '2026-02-04T13:54:28.7929678'
+                  FromUserId: 97aa0081-8ca5-4acb-b757-15efd1bba944
+                  ToUserId: ae116cd4-a26e-47ab-8b0f-07d5ac9cb79c
+                  AssignerUserId: ae116cd4-a26e-47ab-8b0f-07d5ac9cb79c
         '400':
           description: Bad Request
           headers:
@@ -996,8 +1176,9 @@ paths:
                 Message: One or more validation errors occurred
                 Response:
                   - Field: JobId
-                    Message: JobId must be greater than or equal to 1.
-        undefined:
+                    Message: JobId must be greater than zero.
+        '404':
+          description: Not Found
           headers:
             Content-Type:
               schema:
@@ -1009,5 +1190,6 @@ paths:
                 type: object
               example:
                 Status: false
+                Code: OfflineJobs.JobNotFound
                 Message: No job found for the requested JobId.
                 Response: null
