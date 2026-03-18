@@ -944,9 +944,9 @@ paths:
                     Message: PageSize must be between 1 and 200.
                   - Field: SortOrder
                     Message: sortOrder must be 'asc' or 'desc'.
-                  - Field: CreateDate
+                  - Field: lastActionDate
                     Message: >-
-                      createDate must be in 'yyyy-MM-dd' format (e.g.
+                      lastActionDate must be in 'yyyy-MM-dd' format (e.g.
                       2025-01-15).
         '403':
           description: Forbidden
